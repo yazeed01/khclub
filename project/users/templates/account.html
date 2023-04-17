@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% if requ %}{% endif %}
+{% load static %}
+
+{% block title %}حسابي{% endblock %}
+{% block body %}
+
+<section class="page-section">
+<div class="container acc">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast-container position-absolute top-20 start-0 p-3" style="z-index: 1;" id="mas-time" >
+                <div class="toast show rounded-0 border-0">
+                    <div class="toast-header rounded-0" style="border-bottom:solid #2aa499;border-right:solid #2aa499;border-top:solid #FFDF6B ;border-left:solid #FFDF6B ;">
+                        <strong class="me-auto">
+                            {% if  message.tags == 'info' %}
+                                <i class="fa-solid fa-circle-info fa-xl" style="color:#0086ff;"></i> {{ message }}
+                            {% elif message.tags == 'success' %}
+                                <i class="fa-solid fa-circle-check fa-xl" style="color:#0086ff;"></i> {{ message }}
+                            {% endif %}
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+
+
+
+
+
+
+    <div class="row">
+        <div class="card info p-4 col-md-6 ">
+            <h2 class="title-section text-center mb-5">الإعدادات الشخصية</h2>
+            <div class="card-body shadow">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-3">{% if request.user.image %}<img class="rounded-circle mt-2" width="150px" src="{{request.user.image.url}}"/>{% else %}<img class=" mt-2" width="150px" src="{% static 'img/user-logo.png' %}"/>{% endif %}<span class="font-weight-bold">{{request.user.profile.name}}</span>
+                    <span class="text-black-50">{{request.user.email}}</span></div>
+                </div>
+                <div class="col-md-12 border-right">
+                    <div class="p-3 py-3">
+                        <div class="row mt-2">
+                            <form action="{{ request.path }}" method="post">
+                                {% csrf_token %}
+                                {% include 'includes/form.html' %} 
+                                <div class="mt-5 text-center"><button type="submit" class="btn btn-primary shadow-sm rounded-0">حفظ</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card list-ans col-md-6 p-4 ">
+            <h2 class="title-section text-center mb-5">نقاطي</h2>
+            <div class="card-body shadow rounded">
+                <div class="col-md-12 border-right">
+                    <div class="p-3 py-2">
+                        <center><img src="{% static 'img/260.svg'%}" class="col-6"></center>
+                            <h5 class="text-center mt-4 mb-5">مجموع النقاط: {{to_po}}</h5>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            {% for i in coAns %}
+                                <div class="col-md-12 list-ans-acc" style="{% if i.correct_answer.question.quiz.date_end < today.date %}
+                                                                                {% if i.correct_answer.is_correct == True %}
+                                                                                    border-right: 3px solid #00ffad;
+                                                                                {% else %}border-right: 3px solid red;
+                                                                                {% endif %} 
+                                                                            {% else %}border-right: 3px solid #00ffad;{% endif %}">
+                                    <div class="bg-body shadow p-3 mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <h4 class="mb-0">
+                                                {{i.correct_answer.question.quiz.name}}
+                                                <br>
+                                                <p class="mb-0">
+                                                    {% if i.correct_answer.question.quiz.date_end >= today.date %}
+                                                    ينتهي السؤال في 
+                                                    {% else %}
+                                                    انتهى السؤال في 
+                                                    {% endif %}
+                                                    {{i.correct_answer.question.quiz.date_end}}
+                                                </p>
+                                                {% if i.correct_answer.question.quiz.period %}
+                                                    <p class="mb-0">لـ {{i.correct_answer.question.quiz.period.name}} من {{i.correct_answer.question.quiz.period.date_start}} إلى {{i.correct_answer.question.quiz.period.date_end}}</p>{% endif %}
+                                            </h4>
+                                            <p class="mb-0">
+                                                {% if i.correct_answer.is_correct == True %}
+                                                    {% if i.get_points %}
+                                                        {{i.get_points}}
+                                                    {% else %}
+                                                        0
+                                                    {% endif %}
+                                                {% else %}
+                                                        0
+                                                {% endif %}
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="mx-auto" style="width: 105px;">
+                                <button type="button" class="btn btn-primary shadow-sm rounded-0" id="loadMore">عرض المزيد</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</section>
+
+{% endblock %}

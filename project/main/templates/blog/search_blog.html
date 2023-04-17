@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}المدونة{% endblock title %}
+
+{% block body %}
+
+    <!-- Page Header -->
+    <div class="page-header-blog shadow">
+        <div class="container">
+            <h1>المدونة</h1>
+        </div>
+    </div>
+
+
+    <!-- Right Sidebar Container  -->
+    <section class="page-section padding-60">
+        <div class="container">
+            <div class="row">
+                <!-- Content -->
+                {% if search_blog %}
+                    {% if blogs %}
+                        <div class="col-md-8 me-5">
+                            <div class="blog-listing">
+                                {% for blog in blogs %}
+                                    {% if blog.blog.display == True %}
+                                        <article class="mt-5">
+                                            {% if blog.blog.image %}
+                                                <img class="img-thumbnail shadow border-0 rounded-0" src="{{blog.blog.image.url}}">
+                                            {% endif %}
+                                            {% if blog.blog.url_video %}
+                                                <div class="ratio ratio-16x9">
+                                                    <iframe src="{{blog.blog.url_video}}" title="YouTube video" width="600" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                                </div>
+                                                {% comment %} <div class="ratio ratio-16x9">
+                                                    <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" title="YouTube video" allowfullscreen></iframe>
+                                                </div> {% endcomment %}
+                                            {% endif %}
+                                            <h2><a href="{% url 'main:blog_single' blog.blog.slug %}">{{blog.blog.title}}</a></h2>
+                                            <p>{{blog.blog.body|safe|truncatewords:55}}<a href="{% url 'main:blog_single' blog.blog.slug %}">اقرأ أكثر</a></p>
+                                            <div class="post-meta">
+                                                <nav class="nav">
+                                                    <span><li><i class="fa fa-calendar"></i> {{blog.blog.created_in.date}}</li></span>
+                                                    <span> <li><i class="fa fa-user"></i> بواسطة {{blog.blog.author}}</li></span>
+                                                </nav> 
+                                            </div>
+                                        </article>
+                                        <hr>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.paginator.num_pages > 1 %}
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                                            {% endif %}
+                                            <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                            
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    {% else %}
+                    <div class="col-md-9">
+                        <center>
+                            <h1 class="text-center fs-2">لا يوجد تدوينة بـ"{{ search_blog }}"</h1>
+                            <img src="{% static 'img/62.svg' %}" class="col-10" alt="" srcset="">
+                        </center>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="col-md-9">
+                        <center>
+                            <h1 class="text-center fs-2">أبحث في المدونة</h1>
+                            <img src="{% static 'img/62.svg' %}" class="col-10" alt="" srcset="">
+                        </center>
+                    </div>
+                {% endif %}
+
+
+                <!-- Search -->
+                <div class="col-md-3 mt-5" id="search">
+                    <aside class="sidebar">
+                        <div class="widget">
+                            <form action="{% url 'main:blog_search' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group input-group">
+                                    <input class="form-control me-2" type="search" name="search_blog" placeholder="بحث" aria-label="Search" required>
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="widget blog-widget mt-5">
+                            <div class="tabs">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="popularPosts">
+                                        <ul class="post-list">
+                                            {% if blog_first_5 %}
+                                                <h2><span class="title-regular">أحدث</span> المواضيع</h2>
+                                                {% for i in blog_first_5 %}
+                                                    {% if i.blog.display == True %}
+                                                        <li class="post">
+                                                            <div class="post-info">
+                                                                <a href="{% url 'main:blog_single' i.blog.slug %}">{{i.blog.title}}</a>
+                                                                <div class="post-meta">
+                                                                    {{i.blog.created_in.date}}
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+{% endblock body %}

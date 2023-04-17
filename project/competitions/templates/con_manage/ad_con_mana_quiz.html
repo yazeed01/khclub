@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+{% load static %}
+{% if request.user.is_superuser %}
+{% block title %}إدارة المسابقات | {{que.quiz.name}}{% endblock %}
+{% block body %}
+    {% if request.user.is_superuser %}
+        <div class="container ad_con_quiz">
+
+            <div class="col-md-12 text-center">
+                <h4 class="title-section">{{que.quiz.name}}</h4>
+                <p class="mt-3">من {{que.quiz.date_start}} إلى {{que.quiz.date_end}}</p>
+                <p>{% if que.quiz.date_end >= today.date %}<p class="ac">الحالة: نشط</p>{% else %}<p class="ex">الحالة: منتهي</p>{% endif %}</p>
+            </div> 
+
+            <div class="ad_con_cards mt-4">
+                <div class="row">
+                    <div class="bg-body mt-2 col-md-4 p-2">
+                        <a href="{% url 'competitions:ad_con_mana_quiz' qu_adm_id %}?show=True">
+                            <div class="p-4 text-center shadow">
+                                عدد الإجابات الصحيحة : {{cou_conAns_True|default:'0'}}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="bg-body mt-2 col-md-4 p-2">
+                        <a href="{% url 'competitions:ad_con_mana_quiz' qu_adm_id %}">
+                            <div class="p-4 text-center shadow">
+                                عدد المشاركات : {{cou_conAns_All|default:'0'}}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="bg-body mt-2 col-md-4 p-2">
+                        <a href="{% url 'competitions:ad_con_mana_quiz' qu_adm_id %}?show=False">
+                            <div class="p-4 text-center shadow">
+                                عدد الإجابات الغير صحيحة : {{cou_conAns_False|default:'0'}}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اختيار عشوائي</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h4>
+                            {% if que.quiz.date_end < today.date %}
+                                {% if random_coAns %}
+                                    الفائز هو: {{random_coAns.created_by}} <i class="fas fa-trophy"></i>
+                                    <center><img src="{% static 'img/314.svg'%}" class="col-6"></center>
+                                {% else %}
+                                    لابد من ان يكون هناك مشاركين لاختيار الفائز.
+                                {% endif %}
+                            {% else %}
+                                لابد من انتهى المدة للسؤال ليتم الاختيار العشوائي للفائز.
+                            {% endif %}
+                        </h4>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 bg-body text-center p-4 mt-4 shadow">
+                {{que.text|safe}}
+            </div>
+
+            <div class="col-md-12 bg-body p-4 mt-4 mb-5 shadow">
+                {% if coAns %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">اسم المستخدم</th>
+                            <th scope="col">إجابة المستخدم</th>
+                            <th scope="col">الإجابة الصحيحة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for coAn in coAns %}
+                            <tr>
+                                <th scope="row">{{coAn.id}}</th>
+                                <td>{{coAn.created_by}}</td>
+                                <td>{{coAn.correct_answer}}</td>
+                                <td> 
+                                {% if coAn.correct_answer.is_correct == True %}
+                                <i class="fas fa-check-circle" style='color:#00ff04;'></i>
+                                {% else %}
+                                    <i class="fas fa-times" style='color:#F00;'></i>
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h3>لا توجد بيانات.</h3>
+            {% endif %}
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">اختيار عشوائي</button><a class="btn btn-primary mt-3 ms-3" href="{% url 'competitions:ad_con_mana' %}">الى الخلف</a>
+            </div>
+
+        </div>
+    {% endif %}
+{% endblock %}
+{% endif %}

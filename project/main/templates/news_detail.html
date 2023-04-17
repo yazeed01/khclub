@@ -1,0 +1,47 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %}الأخبار | {{news.news}}{% endblock %}
+{% block body%}
+
+<!-- NEWS Detail-->
+<section class="page-section mt-5">
+  <div class="container">
+    {% if news %}
+      {% if news.news.display == True %}
+        <div class="row news">
+          <div class="col-md-12">
+            <article class='shadow-lg p-4 mb-5 bg-body'>
+                <div class="col-md-12">
+                  <div class="row">
+                  <div class="col-md-6">
+                    {% if news.news.image %}
+                      <div class="col-md-10">
+                        <img class="card-img rounded" src="{{news.news.image.url}}" alt="" />
+                      </div>
+                    {% else %}
+                      <div class="col-md-10">
+                        <img class="card-img rounded" src="{% static 'img/logo2.jpeg' %}" alt="" />
+                      </div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                <h2>{{news.news.title}}</h2>
+                <p>{{news.news.body|safe}}</p>
+                <small class="text-muted">{{news.news.created_in.date}}</small>
+              </div>
+          </div>
+        </div>
+            </article>
+          </div>
+        </div>
+      {% else %}
+        <script>
+          window.location.href = "{% url 'main:news' %}"
+        </script>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

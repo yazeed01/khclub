@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}فريق العمل{% endblock title %}
+
+{% block body%}
+    <section class="page-section mb-5 mt-4">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-12 text-center mt-4">
+                    <h2 class="title-section"><span class="title-regular">فريق</span> العمل</h2>
+                </div>
+            </div>
+            {% if teams %}
+            <div class="row">
+                {% for team in teams%}
+                        <div class="col-md-6 col-sm-12 col-lg-4 team-work">
+                            <div class="card shadow p-3 mb-1 rounded h-100" style="background-image: linear-gradient(to left, #ffdf6b, #2aa499);border:0;">
+                                {% if team.image %}
+                                    <img src="{{team.image.url}}" class="" alt="">
+                                {% else %}
+                                    <img src="{% static 'img/logo.png' %}"  class="img2" alt="">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">{{team.name}}</h5>
+                                    <p class="card-text text-center">{{team.type_user}}</p>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <center>
+                <h1 class="mt-5" style="font-size:35px;">قريباً...</h1>
+                <img src="{% static 'img/62.svg' %}" class="col-10" alt="" srcset="">
+            </center>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

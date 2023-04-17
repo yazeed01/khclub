@@ -1,0 +1,42 @@
+{% extends "base_users.html" %} 
+{% load static %}
+{% block body%}
+
+
+<nav class="navbar navbar-expand-lg navbar-light" style="margin: top 30px;">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'main:home' %}"
+      ><img
+        class="logo"
+        src="{% static 'img/logo.png'%}"
+        width="60px"
+        height="60px"
+        alt="Logo"
+    /></a>
+  </div>
+</nav> 
+
+    <!-- Login -->
+    <section class="page-section login">
+        <div class="container">
+            <div class="row">
+            <div class="col-md-6">
+                <div class=" shadow-lg p-3 mb-5">
+                    <div class="card-body">
+                      <h2 class="title-section text-center"><span class="title-regular">تسجيل</span> الدخول</h2>
+                      <form action="{{ request.path }}" method="post">
+                        {% csrf_token %}
+                        {% include 'includes/form.html' %}
+                        <p class="mt-3">ماعندك حساب؟ <i class="far fa-surprise"></i> <a href="{% url 'users:singup' %}">انشئ حساب</a></p>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">دخول</button>
+                        </div> 
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

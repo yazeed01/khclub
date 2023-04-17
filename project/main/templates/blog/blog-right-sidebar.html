@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}المدونة{% endblock title %}
+
+{% block body %}
+
+    <!-- Page Header -->
+    <div class="page-header-blog shadow">
+        <div class="container">
+            <h1>المدونة</h1>
+        </div>
+    </div>
+
+
+    <!-- Right Sidebar Container  -->
+    <section class="page-section padding-60">
+        <div class="container">
+            <div class="row">
+                <!-- Content -->
+                {% if page_obj %}
+                    <div class="col-md-8 me-5">
+                        <div class="blog-listing">
+                            {% for blog in page_obj %}
+                                {% if blog.blog.display == True %}
+                                    <article class="mt-5">
+                                        {% if not blog.blog.image and not blog.blog.url_video %}
+                                        <div class="col-md-9">
+                                            <img src="{% static 'img/logo.png' %}" class="card-img rounded-0 " alt="" srcset="" style="border:solid #FFDF6B;">
+                                        </div>
+                                        {% endif %}
+                                        {% if blog.blog.image %}
+                                        <div class="col-md-9">
+                                            <img class="card-img rounded-0" src="{{blog.blog.image.url}}" style="border:solid #FFDF6B;">
+                                        </div>
+                                        {% endif %}
+                                        {% if blog.blog.url_video %}
+                                        <div class="col-md-9">
+                                            <div class="ratio ratio-16x9">
+                                                <iframe src="{{blog.blog.url_video}}" title="YouTube video" width="600" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="border:solid #FFDF6B;"></iframe>
+                                            </div>
+                                        </div>
+                                            {% comment %} <div class="ratio ratio-16x9">
+                                                <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" title="YouTube video" allowfullscreen></iframe>
+                                            </div> {% endcomment %}
+                                        {% endif %}
+                                        <h2 class="mt-3"><a href="{% url 'main:blog_single' blog.blog.slug %}">{{blog.blog.title}}</a></h2>
+                                        <div class="post-meta">
+                                            <nav class="nav">
+                                                <span class="mx-2"><i class="fa fa-calendar"></i></span> <li> {{blog.blog.created_in.date}}</li>
+                                                <span class="mx-2"><i class="fa fa-user"></i> بواسطة</span><li>  {{blog.blog.author}}</li>
+                                            </nav> 
+                                        </div>
+                                        {% if blog.blog.body|safe|truncatewords:55|length >= 270 %}
+                                            <p>{{blog.blog.body|safe|truncatewords:55}}<a href="{% url 'main:blog_single' blog.blog.slug %}">المزيد</a></p>
+                                        {% else %}
+                                            <p>{{blog.blog.body|safe|truncatewords:55}}</p>
+                                        {% endif %}
+                                       
+                                    </article>
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.paginator.num_pages > 1 %}
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?page=1">&laquo; الأول</a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">سابق</a></li>
+                                        {% endif %}
+                                        <li class="page-item disabled"><a class="page-link" href="#">صفحة  {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}</a></li>
+                        
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">التالي</a></li>
+                                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">الاخير &raquo;</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                <!-- Search -->
+                <div class="col-md-3 mt-5" id="search">
+                    <aside class="sidebar">
+                        <div class="widget">
+                            <form action="{% url 'main:blog_search' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group input-group">
+                                    <input class="form-control me-2" type="search" name="search_blog" placeholder="بحث" aria-label="Search" required>
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                {% else %}
+                    <center>
+                        <h1 style="font-size:35px;">قريباً...</h1>
+                        <img src="{% static 'img/62.svg' %}" class="col-10" alt="" srcset="">
+                    </center>
+                {% endif %}
+
+
+
+                        <div class="widget blog-widget mt-5">
+                            <div class="tabs">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="popularPosts">
+                                        <ul class="post-list">
+                                            {% if blog_first_5 %}
+                                                <h2><span class="title-regular">أحدث</span> المواضيع</h2>
+                                                {% for i in blog_first_5 %}
+                                                    {% if i.blog.display == True %}
+                                                        <li class="post">
+                                                            <div class="post-info">
+                                                                <a href="{% url 'main:blog_single' i.blog.slug %}">{{i.blog.title}}</a>
+                                                                <div class="post-meta">
+                                                                    {{i.blog.created_in.date}}
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+{% endblock body %}

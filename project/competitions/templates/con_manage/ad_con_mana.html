@@ -1,0 +1,78 @@
+{% extends 'base.html'%}
+{% if request.user.is_superuser %}
+{% block title %}إدارة المسابقات{% endblock %}
+    {% block body %}
+
+        {% if request.user.is_superuser %}
+            <section class="page-section">
+                <div class="container ad_con">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="toast-container position-absolute top-20 start-0 p-3" style="z-index: 1;" id="mas-time">
+                            <div class="toast show rounded-0 border-0">
+                                <div class="toast-header rounded-0 border-0" style="background-image: linear-gradient(to left, #ffdf6b, #2aa499);">
+                                    <strong class="me-auto">
+                                        {% if  message.tags == 'info' %}
+                                            <i class="fa-solid fa-circle-info fa-xl" style="color:#0086ff;"></i> {{ message }}
+                                        {% elif message.tags == 'success' %}
+                                            <i class="fa-solid fa-circle-check fa-xl" style="color:#0086ff;"></i> {{ message }}
+                                        {% endif %}
+                                    </strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+                    <div class="col-md-12 text-center">
+                        <h4 class="title-section">منطقة إدارة المسابقات</h4>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6 col-lg-3 p-3 mt-5 shadow">مرحبا {{request.user}}</div>
+
+                    <div class="row mb-5">
+                        {% for quiz in quizs %}
+                            <div class="col-md-6 col-sm-12 col-lg-4">
+                                <a href="{% url 'competitions:ad_con_mana_quiz' quiz.id %}">
+                                <div class="card mt-4 shadow">
+                                    <div class="card-body">
+                                        <h5 class="card-title"> <h2>{{quiz.name}}</h2></h5>
+                                        <p>من {{quiz.date_start}} إلى {{quiz.date_end}}</p>
+
+                                        {% if quiz.date_end >= today.date %}
+                                            <p class="ac">الحالة: نشط</p>
+                                        {% else %}
+                                            <p class="ex">الحالة: منتهي</p>
+                                        {% endif %} 
+
+                                    </div>
+                                </div>
+                            </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                                {% endif %}
+                                <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+            </section>
+
+        {% endif %}
+    {% endblock %}
+{% endif %}

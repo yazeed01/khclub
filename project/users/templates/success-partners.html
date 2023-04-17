@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}شركاء النجاح{% endblock title %}
+
+{% block body%}
+
+<style>
+  .borderb{
+    border-top: solid 4px #2aa499;
+}
+</style>
+
+
+<section class="page-section">
+<div class="container mt-5 mb-5">
+
+            <div class="col-md-12 text-center">
+                <h2 class="title-section"><span class="title-regular">شركاء</span> النجاح</h2>
+                <div class="bordera mt-5" style="border-top: solid 3px #ffdf6b"></div>
+                <br/>
+            </div>
+
+{% if partners %}
+  <div class="row">
+    {% for partner in partners%}
+      {% if partner.display == True %}
+        <div class="card col-md-6 border-0 p-3 text-center">
+            <img src="{{partner.image.url}}" class="card-img-top" style="max-width: 100%; height: auto; border-radius: 40px; border: 5px solid #FFDF6B;" alt="..." />
+            <div class="card-body">
+              <h2 class="card-title">{{partner.name}}</h2>
+              <br/>
+              {% if partner.who_i %}
+              <h4>من نحن؟</h4>
+                <p class="card-text">{{partner.who_i}}</p>
+              {% endif %}
+              {% if partner.date_start %}
+                <p class="card-text">
+                  <small class="text-muted">{{partner.date_start}} </small>
+                </p>
+              {% endif %}
+            </div>
+          </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <center>
+    <h1 style="font-size:35px;">قريباً...</h1>
+    <img src="{% static 'img/62.svg' %}" class="col-10" alt="" srcset="">
+</center>
+  {% endif %}
+</div>
+</section>
+{% endblock %}

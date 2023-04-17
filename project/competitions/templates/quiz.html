@@ -1,0 +1,100 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}مسابقات | {{ques.quiz.name}}{% endblock %}
+
+{% block body %}
+
+{% if request.user.is_authenticated %}
+<section class="page-section">
+<div class="container">
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <div class="toast show alert" id="mas-time">
+                    <div class="toast-header">
+                    <strong class="me-auto">{% if message.tags == 'error' %}خطأ{% endif %}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        <p class="text-center">{{ message }}</p>
+                        <center><img src="{% static 'img/128.svg'%}" width='200'></center>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+            <div class="row">
+                <div class="col-md-12 text-center ">
+                    <h2 class="title-section mb-4">{{ques.quiz.name}}</h2>
+                </div>
+            </div>
+
+        <div class="card shadow p-2 rounded-0 col-8 col-md-12 col-sm-6 col-lg-6 mx-auto" style="border-bottom:solid #2aa499;border-right:0;border-top:solid #FFDF6B ;border-left:0;">
+            <div class="card-body ">
+                {% if ques.quiz.date_end >= today.date %}
+                    {% if ans == True %}
+                        <h5 class="card-title text-center">{{ques.text|safe}}</h5>
+                        <p class="text-center">{{ques.tyep}}</p>
+                        <form action="." method="post">
+                            {% csrf_token %}
+                            {% for ans in ques.get_answers %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="{{ans.id}}" name="flexRadioDefault" id="flexRadioDefault1" required>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        {{ans.text}}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            <button class="btn btn-primary mt-4 rounded-0" type="submit">إرسال</button>
+                        </form>
+                    {% elif ans == False %}
+                    <h2>You solved this question!</h2>                
+                    <div>You will leave after: <span id="time">5</span></div>
+                    <script>
+                        logout()
+                        function logout() {
+                            window.setTimeout(function () {
+                            window.location.href = "{% url 'competitions:competition' %}"
+                        }, 6000);
+                        }
+        
+                        function startTimer(duration, display) {
+                            var timer = duration, seconds;
+                            setInterval(function () {
+                                seconds = parseInt(timer % 60, 10);
+                                seconds = seconds < 10 ? "" + seconds : seconds;
+                                display.textContent = seconds;
+                                if (--timer < 0) {
+                                    timer = duration;
+                                }
+                            }, 1000);
+                        }
+        
+                        window.onload = function () {
+                            var fiveMinutes = 60 * 0.083,
+                                display = document.querySelector('#time');
+                            startTimer(fiveMinutes, display);
+            
+                        };
+                        
+                    </script>
+                    {% endif %}
+        
+                {% else %}
+                    <h2>The question period has expired.</h2>
+                {% endif %} 
+        
+            </div>
+        </div>
+
+
+
+</div>
+
+{% endif %}
+
+
+{% endblock body %}
+

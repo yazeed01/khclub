@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="تفرد بالتميز وتفكير بإبداع." />
+    <title>النادي العلمي بثانوية خليص | {% block title %}{% endblock title %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo-we3.png' %}" sizes="16x16">
+    <!-- normalize core CSS -->
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet" />
+    <!-- Bootstrap 5 -->
+    <link href="{% static 'bootstrap5/css/bootstrap.rtl.min.css'%}" rel="stylesheet" />
+    <link href="{% static 'bootstrap5/css/bootstrap.rtl.min.css.map'%}" rel="stylesheet" />
+    <!-- Load jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'bootstrap/css/ie10-viewport-bug-workaround.css'%}" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <script src="{% static 'bootstrap/js/ie-emulation-modes-warning.js'%}"></script>
+    <!-- chartjs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/all.min.css'%}">
+    <!-- Main styles of this template -->
+    <link href="{% static 'css/style.min.css'%}" rel="stylesheet" />
+    <!-- Custom CSS. Input here your changes -->
+    <link href="{% static 'css/custom.css'%}" rel="stylesheet" />
+
+  </head>
+  <body style="margin:0;padding:0;height:100%;">
+    <div class="wrapper">
+      {% include "partials/header.html" %}
+      <main>
+      {% block body %}{% endblock %}
+      </main>
+      {% include "partials/footer.html" %}
+    </div>
+
+
+  <!-- Bootstrap popper and bundle -->
+  <script type="text/javascript" src="{% static 'bootstrap5/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Custom Js. Input here your changes -->
+
+    <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+  </body>
+</html>

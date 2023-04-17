@@ -1,0 +1,85 @@
+{% load static %}
+{% if request.resolver_match.url_name != "home" %}
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'main:home' %}"
+        ><img
+          class="logo"
+          src="{% static 'img/logo.png'%}"
+          width="60px"
+          height="60px"
+          alt="Logo"
+      /></a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav navbar-right me-auto mb-2 mb-lg-0">
+            {% with url_name=request.resolver_match.url_name %}
+                <li class="nav-item">
+                    <a
+                    class="nav-link {% if url_name == 'home' %} active{% endif %}"
+                    aria-current="page"
+                    href="{% url 'main:home' %}"
+                    >الرئيسية</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if url_name == 'blog' or url_name == 'blog_single'  %} active{% endif %}" href="{% url 'main:blog' %}">المدونة</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if url_name == 'news' or url_name == 'news_detail' %} active{% endif %}" href="{% url 'main:news' %}">الأخبار</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if url_name == 'teamwork' %} active{% endif %}" href="{% url 'users:teamwork' %}">فريق العمل</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if url_name == 'competition' or url_name == 'quiz' %} active{% endif %}" href="{% url 'competitions:competition' %}">مسابقات</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if url_name == 'partners' %} active{% endif %}" href="{% url 'users:partners' %}"
+                    >شركاء النجاح</a
+                    >
+                </li>
+            {% endwith %}
+        </ul>
+        {%if user.is_authenticated %}
+          <div class="d-flex">          
+            <ul class="navbar-nav navbar-left me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown user-logo">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.image %}
+                      <img class="user-img"  src="{{request.user.image.url}}" />
+                    {% else %}
+                      <img src="{% static 'img/user-logo.png' %}" />
+                    {% endif %}                  
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'users:account' %}"><i class="fa-regular fa-user"></i> حسابي</a></li>
+                    {% if request.user.is_superuser %} 
+                      <li><a class="dropdown-item" href="{% url 'competitions:ad_con_mana' %}"><i class="far fa- user"></i> إدارة المسابقات</a></li>
+                      <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="far fa- user"></i> إدارة النادي</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{% url 'users:password_change' %}"><i class="fas fa-exchange-alt"></i> تغيير كلمة المرور</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a></li>
+
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+    </div>
+  </nav> 
+</header>
+{% endif %}

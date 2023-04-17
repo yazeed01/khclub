@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{{request.user.profile.name}}
+{{request.user.profile.address}}
+{{request.user.profile.image}}
+{{request.user.profile.who_i}}
+
+
+{% block body %}
+
+<body style="background-image: linear-gradient(to bottom,#FFDF6B ,#2aa499); background-size: 100% 100%; background-attachment: fixed;">
+
+
+<div class="container rounded  mt-5 mb-5 " dir='rtl'>
+    <div class="row">
+
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="{{request.user.profile.image.url}}"><span class="font-weight-bold">{{request.user.profile.name}}</span>
+            <span class="text-black-50">{{request.user.email}}</span></div>
+        </div>
+
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">إعدادات الملف الشخصي</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">{{request.user.profile.name}}</label><input type="text" class="form-control" placeholder="first name" value=""></div>
+                    <div class="col-md-6"><label class="labels">{{request.user.profile.lname}}</label><input type="text" class="form-control" placeholder="last name" value=""></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+{% endblock body %}
