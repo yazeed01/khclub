@@ -23,10 +23,11 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = "6jqs74x$o8otum&l=75*twpu&g7tvhm)h@qy)euw7gkz^c7)^e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,13 +47,13 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'competitions.apps.CompetitionsConfig',
     "category.apps.CategoryConfig",
-    'ckeditor',
     'widget_tweaks',
-    'django_seed',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,7 +68,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,19 +91,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('NAME'),
-        'USER': os.environ.get('USER'),
-        'PASSWORD': os.environ.get('PASSWORD'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -145,23 +137,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles")
-
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-
 MEDIA_URL = '/media/'
+
+if DEBUG is True:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
+
 MEDIA_ROOT = os.path.join(BASE_DIR , "media")
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST ='smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'yaz7894@gmail.com'
-# EMAIL_HOST_PASSWORD = 'la1430na'
-# EMAIL_USE_TLS = True
+STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles-cd")
+
 
 LOGOUT_REDIRECT_URL = 'main:home'
 LOGIN_REDIRECT_URL = 'main:home'
