@@ -147,7 +147,7 @@ if DEBUG is True:
 
 MEDIA_ROOT = os.path.join(BASE_DIR , "media")
 
-STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles-cd")
+STATIC_ROOT = os.path.join(BASE_DIR , "static")
 
 
 LOGOUT_REDIRECT_URL = 'main:home'
